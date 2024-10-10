@@ -1,4 +1,5 @@
 let tasks = ["Buy milk", "Clean the room", "Go to the gym"];
+let completedTasks = [];
 
 const displayTasks = () => {
     let taskDisplay = document.querySelector('#taskDisplay');
@@ -21,11 +22,18 @@ const displayTasks = () => {
         taskLinks.classList.add('task-links');
 
 
-        // create the update and delete buttons
+        // create the update and delete button
+        const doneLink = document.createElement('a');
+        doneLink.href = '#';
+        doneLink.textContent = 'Mark as Done';
+        doneLink.classList.add('text-green-500', 'mr-4');
+        taskLinks.appendChild(doneLink);
+
         const updateButton = document.createElement('a');
         updateButton.href = '#';
         updateButton.textContent = 'Update';
         updateButton.classList.add('text-blue-500' , 'mr-4');
+        doneLink.addEventListener('click', () => markAsDone(index));
         updateButton.addEventListener('click', () => editTask(index));
         taskLinks.appendChild(updateButton);
         
@@ -46,6 +54,7 @@ const displayTasks = () => {
 
 const saveTaskToLocalStorage = () => {
     localStorage.setItem('tasks', JSON.stringify(tasks));
+    localStorage.setItem('completedTasks', JSON.stringify(completedTasks));
 }
 
 const addTask = () => {
@@ -61,6 +70,13 @@ const addTask = () => {
     else{
         alert('Please enter a task')
     }
+}
+
+const markAsDone = (index) => {
+    const task = tasks.splice(index, 1)[0];
+    completedTasks.push(task);
+    saveTaskToLocalStorage();
+    displayTasks();
 }
 
 const editTask = (index) => {
@@ -85,10 +101,14 @@ const deleteTask = (index) => {
 
 const loadTaskFromLocalStorage = () => {
     const storedTasks = localStorage.getItem('tasks');
+    const storedCompletedTasks = localStorage.getItem('completedTasks');
 
     if(storedTasks){
         tasks = JSON.parse(storedTasks);
         displayTasks();
+    }
+    if(storedCompletedTasks){
+        completedTasks = JSON.parse(storedCompletedTasks); 
     }
 }
 
