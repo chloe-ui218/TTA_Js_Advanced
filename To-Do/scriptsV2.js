@@ -1,5 +1,6 @@
+
 let tasks = ["Buy milk", "Clean the room", "Go to the gym"];
-let completedTasks = [];
+let completedTasks = []
 
 const displayTasks = () => {
     let taskDisplay = document.querySelector('#taskDisplay');
@@ -13,6 +14,7 @@ const displayTasks = () => {
         const taskText = document.createElement('span');
         taskText.textContent = task;
         taskItem.appendChild(taskText);
+        // taskItem.textContent = task;
 
         // create the task links container
         const taskLinks = document.createElement('div');
