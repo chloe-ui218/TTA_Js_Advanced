@@ -5,40 +5,33 @@ const displayTasks = () => {
     let taskDisplay = document.querySelector('#taskDisplay');
     taskDisplay.innerHTML = '';
     tasks.forEach((task, index) => {
-
-        // create the task container
+        // create task container
         const taskItem = document.createElement('li');
         taskItem.classList.add('bg-blue-200', 'p-2', 'm-2', 'rounded-lg', 'flex', 'justify-between', 'list-none');
 
-
-        // create the tasks title container
+        // create the task title
         const taskText = document.createElement('span');
         taskText.textContent = task;
         taskItem.appendChild(taskText);
 
-
-        // create the tasks links container
+        // create the task links container
         const taskLinks = document.createElement('div');
         taskLinks.classList.add('task-links');
 
-
-        // create the update and delete button
+        // create the update and delete buttons
         const doneLink = document.createElement('a');
-        doneLink.href = '#';
+        doneLink.href = "#";
         doneLink.textContent = 'Mark as Done';
         doneLink.classList.add('text-green-500', 'mr-4');
+        doneLink.addEventListener('click', () => markAsDone(index));
         taskLinks.appendChild(doneLink);
 
         const updateButton = document.createElement('a');
         updateButton.href = '#';
         updateButton.textContent = 'Update';
-        updateButton.classList.add('text-blue-500' , 'mr-4');
-        doneLink.addEventListener('click', () => markAsDone(index));
+        updateButton.classList.add('text-blue-500', 'mr-4');
         updateButton.addEventListener('click', () => editTask(index));
         taskLinks.appendChild(updateButton);
-        
-
-
 
         const deleteButton = document.createElement('a');
         deleteButton.href = '#';
@@ -47,7 +40,7 @@ const displayTasks = () => {
         deleteButton.addEventListener('click', () => deleteTask(index));
         taskLinks.appendChild(deleteButton);
 
-        taskItem.appendChild(taskLinks)
+        taskItem.appendChild(taskLinks);
         taskDisplay.appendChild(taskItem);
     })
 }
@@ -73,22 +66,82 @@ const addTask = () => {
 }
 
 const markAsDone = (index) => {
-    const task = tasks.splice(index, 1)[0];
+    const task = tasks.splice(index,1)[0];
     completedTasks.push(task);
     saveTaskToLocalStorage();
     displayTasks();
+    displayCompletedTasks();
+}
+
+const displayCompletedTasks = () => {
+    const completedTasksSection = document.querySelector('#completedTasks');
+    const completedTaskDisplay = document.querySelector('#completedTaskDisplay');
+    completedTaskDisplay.innerHTML = '';
+
+    if (completedTasks.length > 0){
+        completedTasksSection.classList.remove('hidden');
+    }
+    else{
+        completedTasksSection.classList.add('hidden');
+    }
+
+    completedTasks.forEach((task, index) => {
+        const taskItem = document.createElement('li');
+        taskItem.classList.add('bg-green-200', 'p-2', 'm-2', 'flex', 'rounded-lg', 'justify-between', 'list-none');
+
+        const taskText = document.createElement('span');
+        taskText.textContent = task;
+        taskText.classList.add('line-through');
+        taskItem.appendChild(taskText);
+
+        const taskLinks = document.createElement('div');
+        taskLinks.classList.add('task-links');
+
+        const undoLink = document.createElement('a');
+        undoLink.href = '#';
+        undoLink.textContent = 'Undo';
+        undoLink.classList.add('text-blue-500', 'mr-4');
+        undoLink.addEventListener('click', () => undoCompletedTask(index));
+        taskLinks.appendChild(undoLink);
+
+        const deleteButton = document.createElement('a');
+        deleteButton.href = '#';
+        deleteButton.textContent = 'Delete';
+        deleteButton.classList.add('text-red-500');
+        deleteButton.addEventListener('click', () => deleteCompletedTask(index));
+        taskLinks.appendChild(deleteButton);
+
+        taskItem.appendChild(taskLinks);
+        completedTaskDisplay.appendChild(taskItem);
+
+    })
+}
+
+const undoCompletedTask = (index) => {
+    const task = completedTasks.splice(index, 1)[0];
+    tasks.push(task);
+    saveTaskToLocalStorage();
+    displayTasks();
+    displayCompletedTasks();
+}
+
+const deleteCompletedTask = (index) => {
+    if (confirm('Are you sure you want to delete this task')){
+        completedTasks.splice(index, 1);
+        saveTaskToLocalStorage();
+        displayCompletedTasks();
+    }
 }
 
 const editTask = (index) => {
-    const updatedTask = prompt('Enter the updated task', tasks[index]);
-    if (upddatedTask && updatedTask.trim() !== '') {
+    const updatedTask = prompt('Update your task', tasks[index]);
+    if(updatedTask && updatedTask.trim() !== ""){
         tasks[index] = updatedTask.trim();
-        saveTaskToLocalStorage();
-       displayTasks();
-    } else{
-        alert('Please enter a valid task');
+        displayTasks();
     }
-
+    else{
+        alert('Please enter a task')
+    }
 }
 
 const deleteTask = (index) => {
@@ -101,14 +154,15 @@ const deleteTask = (index) => {
 
 const loadTaskFromLocalStorage = () => {
     const storedTasks = localStorage.getItem('tasks');
-    const storedCompletedTasks = localStorage.getItem('completedTasks');
-
+    const storedCompletedTasks = localStorage.getItem('completedTasks')
     if(storedTasks){
         tasks = JSON.parse(storedTasks);
         displayTasks();
     }
+
     if(storedCompletedTasks){
-        completedTasks = JSON.parse(storedCompletedTasks); 
+        completedTasks.JSON.parse(storedCompletedTasks);
+        displayCompletedTasks();
     }
 }
 
@@ -117,3 +171,4 @@ const addTaskButton = document.querySelector('#addTaskButton');
 addTaskButton.addEventListener('click', addTask);
 
 loadTaskFromLocalStorage();
+displayTasks();
