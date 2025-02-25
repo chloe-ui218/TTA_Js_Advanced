@@ -170,3 +170,35 @@ addTaskButton.addEventListener('click', addTask);
 
 //loadTaskFromLocalStorage();
 displayTasks();
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//create
+const User = ["12", "John", "excella"]
+const Data = JSON.stringify(localStorage.setItem('Info', User));
+
+// read: getting all items
+const Data = JSON.parse(localStorage.getItem('Info'));
+
+// update
+
+const User = JSON.parse(localStorage.getItem('Info'));
+User products = ["12", "John", "excella"];
+const Updateproducts = User.push(products);
+const newStorage = JSON.stringify(localStorage.setItem('Info', Updateproducts));
+
+// delete
+localStorage.getItem('Info');
+localStorage.removeItem('Info');

@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Expense Tracker</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 p-5">
+    <div class="max-w-xl mx-auto bg-white p-5 rounded shadow">
+        <h2 class="text-xl font-bold mb-4">Expense Tracker</h2>
+        
+        <form id="expense-form" class="mb-4">
+            <input type="text" id="title" placeholder="Title" class="w-full p-2 border rounded mb-2" required>
+            <input type="number" id="amount" placeholder="Amount" class="w-full p-2 border rounded mb-2" required>
+            <input type="date" id="date" class="w-full p-2 border rounded mb-2" required>
+            <select id="category" class="w-full p-2 border rounded mb-2">
+                <option value="Food">Food</option>
+                <option value="Transport">Transport</option>
+                <option value="Entertainment">Entertainment</option>
+                <option value="Other">Other</option>
+            </select>
+            <button type="submit" class="w-full bg-blue-500 text-white p-2 rounded">Add Expense</button>
+        </form>
+
+       
+    <script src="script.js"></script>
+</body>
+</html>
